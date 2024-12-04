@@ -1,10 +1,9 @@
 import { Text, View, StyleSheet, FlatList } from 'react-native'
-
-export function ListHeader ( props:any ) {
+export function ListHeader(props:any){
     return(
-        <View style={ styles.header }>
-            <Text style={ styles.headerText}>
-                { props.text }
+        <View style = { styles.header }>
+            <Text style = { styles.headerText}>
+                {props.text}
             </Text>
         </View>
     )
@@ -12,11 +11,14 @@ export function ListHeader ( props:any ) {
 
 const styles = StyleSheet.create({
     header: {
+        fontSize:24,
         padding: 6,
-        backgroundColor: "pink",
+        backgroundColor: "purple",
+        marginBottom: 5,
     },
     headerText: {
         fontSize: 24,
         textAlign: "center",
+       
     }
 })

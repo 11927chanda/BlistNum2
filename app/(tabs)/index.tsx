@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, FlatList, Modal, Pressable, TextInput } from 'react-native'
+import { Text, View, StyleSheet, FlatList, Modal, Pressable, TextInput, ImageBackground } from 'react-native'
 import { useState, useEffect, useContext } from 'react'
 import { ListHeader } from '@/components/ListHeader'
 import { ListItemSeparator } from '@/components/ListItemSeparator'
@@ -71,7 +71,7 @@ export default function List(props: any) {
                     <View>
                         <Text style={styles.itemName} >{item.name}</Text>
                         <Text>
-                            added: <DisplayDate date={item.date} mode="date" />
+                            Last Updated: <DisplayDate date={item.date} mode="date" />
                         </Text>
                     </View>
                     <Ionicons name="chevron-forward-outline" size={16} />
@@ -92,7 +92,7 @@ export default function List(props: any) {
                 data={datastate}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
-                ListHeaderComponent={<ListHeader text="Your Lists" />}
+                ListHeaderComponent={<ListHeader text="Welcome to BList" />}
                 ListEmptyComponent={<ListEmpty text="You have no lists, add one" />}
                 ItemSeparatorComponent={ListItemSeparator}
                 style={styles.list}
@@ -113,12 +113,12 @@ export default function List(props: any) {
                         />
                     </Pressable>
                     <View style={styles.modalForm}>
-                        <Text>Name of List</Text>
+                        <Text>Category Title</Text>
                         <TextInput
                             style={styles.modalInput}
                             value={listName}
                             onChangeText={(val) => setListName(val)}
-                            placeholder="name of your list (minimum 3 characters)"
+                            placeholder=" (minimum 3 characters)"
                         />
                         <View style={styles.modalBar}>
                             <Pressable
@@ -216,5 +216,11 @@ const styles = StyleSheet.create({
     modalCloseButtonText: {
         color: "#333333",
         textAlign: "center",
-    }
+    },
+    image: { 
+        width: 200,
+        height: 200,
+        borderRadius: 50,
+     },
+
 })

@@ -1,16 +1,19 @@
 import { Text, View, StyleSheet, FlatList } from 'react-native'
 
-export function ListItemSeparator ( props:any ) {
+export function ListItemSeperator(props:any){
     return(
-        <View style={ styles.separator }>
+        <View style = { styles.seperator }>
             
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    separator: {
-        height: 1,
-        backgroundColor: "#4d3e18",
+    seperator: {
+        height: 20,
+       // backgroundColor: "#32173b",
+        minWidth: '99%',
+        marginLeft: 2,
     },
+    
 })
