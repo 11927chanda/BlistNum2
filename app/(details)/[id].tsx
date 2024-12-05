@@ -134,6 +134,8 @@ export default function DetailScreen(props: any) {
     }, [id])
 
     //for delete
+    
+
     const renderHiddenItem = ( data: {item: ItemPrototype}, rowMap: any) =>(
         <View style={styles.rowBack}>
         <Pressable
@@ -141,19 +143,70 @@ export default function DetailScreen(props: any) {
         onPress={() => deleteListItem(data.item.id)}
         >
             <Text style = {styles.backTextWhite}></Text>
+            <Ionicons name="trash" size={30} color="blue"/>
 
         </Pressable>
         </View>
     )
+    const [confirmModalVisibile, setConfirmModalVisible] = useState<boolean>(false)
+    const [itemToDelete, setItemToDelete] = useState<string | null>(null)
+    
+    const renderConfirmModal =() =>(
+        <Modal
+        transparent ={true}
+        visible ={confirmModalVisibile}
+        animationType='slide'
+        >
+            <View>
+            <Text> Are you sure you want to delete this item?</Text>
+                <View>
+                    <Pressable
+                    onPress={()=>handleConfirmDelete()}
+                    >
+                        <Text>Yes</Text>
+                    </Pressable>
+                    <Pressable
+                    onPress={()=>setConfirmModalVisible(false)}
+                    >
+                        <Text>Cancel</Text>
+                    </Pressable>
+                </View>
+            </View>
+            
+        </Modal>
+    )
+    const handleConfirmDelete = async() =>{
+        if(itemToDelete){
+            await deleteListItem(itemToDelete)
+            setConfirmModalVisible(false)
+            setItemToDelete(null)
+        }
+    }
 
     // list renderer
     const renderItems = ({ item }: any) => (
-        <Link href={{ 
-            pathname: "/(details)/itemdetail",
-            params: { id: item.id, name: item.name }
-        }}
-        >
-            <View style={ styles.item }>
+        // <Link href={{ 
+        //     pathname: "/(details)/itemdetail",
+        //     params: { id: item.id, name: item.name }
+        // }}
+        // >
+            // <View style={ styles.item }>
+            //     <View style={ styles.itemLeft }> 
+            //     <Text style ={styles.title}>{item.name}</Text>
+            //     <Text>Status: {item.status? 'Completed' : 'Pending'} </Text>
+
+            //     </View>
+            //     <View style={ styles.itemRight }>
+            //     <Text style={styles.date }>
+            //     <DisplayDate date={item.date} mode="date" />
+            //   </Text>
+            //     <Text style={styles.date }>Budget: ${item.budget}</Text>
+                
+            //     </View>
+            
+            // </View>
+        // </Link>
+        <View style={ styles.item }>
                 <View style={ styles.itemLeft }> 
                 <Text style ={styles.title}>{item.name}</Text>
                 <Text>Status: {item.status? 'Completed' : 'Pending'} </Text>
@@ -168,7 +221,6 @@ export default function DetailScreen(props: any) {
                 </View>
             
             </View>
-        </Link>
     )
 
     if (list) {
@@ -192,6 +244,7 @@ export default function DetailScreen(props: any) {
                     ItemSeparatorComponent={ListItemSeparator}
                 
                 />
+                {renderConfirmModal()}
 
                     {/* for adding new bucketlist item screen*/ }
                 <Modal visible={ modalVisible }>
