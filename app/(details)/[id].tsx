@@ -143,7 +143,7 @@ export default function DetailScreen(props: any) {
         onPress={() => deleteListItem(data.item.id)}
         >
             <Text style = {styles.backTextWhite}></Text>
-            <Ionicons name="trash" size={30} color="blue"/>
+            <Ionicons name="trash" size={30} color="black"/>
 
         </Pressable>
         </View>
@@ -398,7 +398,28 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignSelf:"flex-end"
     },
-    rowBack: { alignItems: 'center', backgroundColor: "black", flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 15, }, backRightBtn: { alignItems: 'center', bottom: 0, justifyContent: 'center', position: 'absolute', top: 0, width: 75, }, backRightBtnRight: { backgroundColor: 'red', right: 0, }, backTextWhite: { color: '#FFF',},
+    rowBack: { 
+        alignItems: 'center', 
+        // backgroundColor: "black", 
+        flex: 1, 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        paddingLeft: 15, }, 
+        backRightBtn: { 
+            alignItems: 'center', 
+            bottom: 0, 
+            justifyContent: 'center',
+            position: 'absolute', 
+            top: 0, 
+            width: 75, 
+        }, 
+        backRightBtnRight: { 
+            // backgroundColor: 'red', 
+            right: 0, 
+        }, 
+        backTextWhite: 
+        { color: "black",
+        },
 
 
 })
