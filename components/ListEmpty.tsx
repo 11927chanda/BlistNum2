@@ -18,6 +18,6 @@ const styles = StyleSheet.create({
     emptyText: {
         fontSize: 32,
         textAlign: "center",
-        color: "#CCCCCC",
+        color: "red",
     }
 })

@@ -3,7 +3,7 @@ import { useLocalSearchParams, Link, useNavigation } from 'expo-router'
 import { useEffect, useContext, useState } from 'react'
 import { FirestoreContext } from '@/contexts/FirestoreContext'
 import { AuthenticationContext } from '@/contexts/AuthenticationContext'
-import { doc, getDoc, getDocs, collection, addDoc } from '@firebase/firestore'
+import { doc, getDoc, getDocs, collection, addDoc, deleteDoc, updateDoc } from '@firebase/firestore'
 import { Ionicons } from '@expo/vector-icons'
 import { DisplayDate } from '@/components/DisplayDate'
 
@@ -13,6 +13,7 @@ import { ListHeader } from '@/components/ListHeader'
 import { ListItemSeparator } from '@/components/ListItemSeparator'
 
 import { ItemPrototype } from '@/interfaces/ItemInterface'
+import { SwipeListView } from 'react-native-swipe-list-view'
 
 export default function DetailScreen(props: any) {
     const [list, setList] = useState<ListPrototype | any>()
@@ -23,6 +24,7 @@ export default function DetailScreen(props: any) {
     const [itemNote, setItemNote] = useState<string>('')
     const [itemStatus, setItemStatus] = useState<boolean>(false)
     const [itemBudget, setItemBudget] = useState<number>(0)
+    const [editingItem, setEditingItem]= useState<any>(null);
     
     // access navigation object via hook
     const navigation = useNavigation()
@@ -64,7 +66,7 @@ export default function DetailScreen(props: any) {
             name: itemName, 
             note: itemNote, 
             date: new Date().getTime(), 
-            status: false, 
+            status: itemStatus, 
             budget: itemBudget,
         };
 
@@ -75,13 +77,24 @@ export default function DetailScreen(props: any) {
         
             setItemName('')
             setItemNote('')
-            setItemBudget(0)          
+            setItemBudget(0)
+            setItemStatus(false)          
             getListItems()
         }
         catch(error){
             console.error("Error adding item to the list", error);
-        };
+        }
         
+    };
+    const deleteListItem = async(itemId: string): Promise<void>=>{
+        const docRef = doc(db, `listusers/${auth.currentUser.uid}/lists/${id}/items/${itemId}` )
+        try{
+            await deleteDoc(docRef)
+            getListItems()
+
+        }catch{
+            console.error("Error deleting document: ")
+        }
     }
 
     // get all items in the list
@@ -97,6 +110,20 @@ export default function DetailScreen(props: any) {
         })
         setListItems( items )
     }
+
+    //for updating the existing item
+    // const updateListItem = async(itemId, updatedData ) =>{
+    //     const docRef = doc(db,'listusers/${auth.currentUser.uid}/lists/${id}/items')
+    //     try{
+    //         await updateDoc(docRef, updatedData);
+    //         console.log('Document with ID ${itemId} updated');
+    //         getListItems();
+
+    //     }
+    //     catch(error){
+    //         console.error("Error updating document: ", error)
+    //     }
+    // }
     
 
     useEffect(() => {
@@ -105,6 +132,19 @@ export default function DetailScreen(props: any) {
             getList()
         }
     }, [id])
+
+    //for delete
+    const renderHiddenItem = ( data: {item: ItemPrototype}, rowMap: any) =>(
+        <View style={styles.rowBack}>
+        <Pressable
+         style={[styles.backRightBtn, styles.backRightBtnRight ]}
+        onPress={() => deleteListItem(data.item.id)}
+        >
+            <Text style = {styles.backTextWhite}></Text>
+
+        </Pressable>
+        </View>
+    )
 
     // list renderer
     const renderItems = ({ item }: any) => (
@@ -134,15 +174,26 @@ export default function DetailScreen(props: any) {
     if (list) {
         return (
             <View style={styles.page}>
-                <FlatList
+                {/* <FlatList
                     data={listItems}
                     renderItem={renderItems}
                     ListEmptyComponent={<ListEmpty text="You have no items! Add some to this list" />}
                     ListHeaderComponent={<ListHeader text={list.name} />}
                     ItemSeparatorComponent={ListItemSeparator}
+                /> */}
+
+                <SwipeListView
+                     data={listItems}
+                     renderItem={renderItems}
+                     renderHiddenItem={renderHiddenItem}
+                     rightOpenValue={-75}
+                     ListEmptyComponent={<ListEmpty text="You have no items! Add some to this list" />}
+                    ListHeaderComponent={<ListHeader text={list.name} />}
+                    ItemSeparatorComponent={ListItemSeparator}
+                
                 />
 
-                //for adding new bucketlist item screen
+                    {/* for adding new bucketlist item screen*/ }
                 <Modal visible={ modalVisible }>
                     <Pressable style={styles.modalCloseButton} onPress={ () => setModalVisible( false) }>
                         <Ionicons name="close" size={30} />
@@ -256,7 +307,7 @@ const styles = StyleSheet.create({
     },
     item: {
         padding: 10,
-        backgroundColor: "pink",
+        backgroundColor: "#d9d9d9",
         minWidth: '99%',
        // marginLeft: 2,
         margin: 2,
@@ -293,7 +344,8 @@ const styles = StyleSheet.create({
         width: "50%",
         justifyContent: 'flex-end',
         alignSelf:"flex-end"
-    }
+    },
+    rowBack: { alignItems: 'center', backgroundColor: "black", flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 15, }, backRightBtn: { alignItems: 'center', bottom: 0, justifyContent: 'center', position: 'absolute', top: 0, width: 75, }, backRightBtnRight: { backgroundColor: 'red', right: 0, }, backTextWhite: { color: '#FFF',},
 
 
 })

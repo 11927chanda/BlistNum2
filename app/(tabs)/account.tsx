@@ -34,11 +34,107 @@ export default function AccountScreen() {
     }
 
     return (
-      <View>
-        <Text>Account Page</Text>
-        <Pressable onPress={ () => SignOutUser() }>
-            <Text>Sign out</Text>
-        </Pressable>
-      </View>
+    //   <View>
+    //     <Text>Account Page</Text>
+    //     <Pressable onPress={ () => SignOutUser() }>
+    //         <Text>Sign out</Text>
+    //     </Pressable>
+    //   </View>
+
+    <View style={ styles.container }>
+            <Text style ={ styles.title }> Profile Screen</Text>
+            <View style ={ styles.containermain } >
+                <View style ={ styles.container1 }>
+                {/* User Profile */}
+                <Image
+                source ={require('../../assets/images/user1.jpg')}
+                style={styles.image}
+                />
+                </View>
+                <View style ={ styles.container2 }>
+                <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'black' }}> John Doe</Text>
+                <Text style={{ fontSize: 18, fontWeight: '600', color: 'black', marginTop: 10 }}>Travel Enthusiast </Text>
+                <Pressable 
+                style ={ styles.editProfile }>
+                    <Text style={{ fontSize: 18, fontWeight: '600', color: 'white', marginTop: 10 }}>Edit Profile </Text>
+                </Pressable>
+                </View>
+
+                
+            </View>
+            
+            <Pressable style ={ styles.button } 
+            onPress={ ()=> SignOutUser()}>
+                
+                <Text style ={ styles.buttonText }>Sign Out</Text>
+            </Pressable>
+        </View>
     );
   }
+  const styles = StyleSheet.create({
+    container: {
+         flex: 1,
+    },
+    title:{
+        
+        height: 40,
+        backgroundColor: "#693604",
+        margin: 2,
+        padding: 5,
+        textAlign:"center",
+        borderRadius:5,
+        color: "white",
+        fontSize: 18,
+        fontWeight: 'bold',
+
+
+    },
+    containermain:{
+        margin: 2,
+        padding: 5,
+        flexDirection: 'row', 
+        //justifyContent: 'space-between',
+
+    },
+    container1:{
+        margin: 0,
+        padding: 0,
+        height: 200,
+        width: 200,
+        //backgroundColor: "black",
+
+    },
+    image: { 
+        width: 200,
+        height: 200,
+        borderRadius: 50,
+     },
+    container2:{
+        margin: 5,
+        padding: 5,
+        height: 200,
+       
+
+    },
+    editProfile:{
+        height: 40,
+        backgroundColor: "#693604",
+        margin: 2,
+        padding: 0,
+        borderRadius:5,
+        alignItems:"center",
+        
+    },
+    button:{
+        backgroundColor: "#9e7409",
+        padding: 8,
+        margin: '2%',
+        borderRadius:5,
+
+    },
+    buttonText:{
+        color: "#080807",
+        textAlign: "center",
+        fontSize: 16
+    },  
+})

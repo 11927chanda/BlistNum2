@@ -150,11 +150,13 @@ const styles = StyleSheet.create({
     },
     item: {
         padding: 12,
-        backgroundColor: "lightblue",
+        backgroundColor: "#d9d9d9",
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
         width: "100%",
+        margin:2,
+        borderRadius: 10,
     },
     itemName: {
         fontSize: 18
