@@ -10,7 +10,7 @@ import { DisplayDate } from '@/components/DisplayDate'
 import { ListPrototype } from '@/interfaces/ListInterface'
 import { ListEmpty } from '@/components/ListEmpty'
 import { ListHeader } from '@/components/ListHeader'
-import { ListItemSeparator } from '@/components/ListItemSeparator'
+import { ListItemSeperator } from '@/components/ListItemSeparator'
 
 import { ItemPrototype } from '@/interfaces/ItemInterface'
 import { SwipeListView } from 'react-native-swipe-list-view'
@@ -112,18 +112,51 @@ export default function DetailScreen(props: any) {
     }
 
     //for updating the existing item
-    // const updateListItem = async(itemId, updatedData ) =>{
-    //     const docRef = doc(db,'listusers/${auth.currentUser.uid}/lists/${id}/items')
-    //     try{
-    //         await updateDoc(docRef, updatedData);
-    //         console.log('Document with ID ${itemId} updated');
-    //         getListItems();
+    const updateListItem = async(itemId: string, updatedData: Partial<ItemPrototype>) =>{
+        const docRef = doc(db,'listusers/${auth.currentUser.uid}/lists/${id}/items/${itemId')
+        try{
+            await updateDoc(docRef, updatedData);
+            console.log('Document with ID ${itemId} updated');
+            getListItems();
 
-    //     }
-    //     catch(error){
-    //         console.error("Error updating document: ", error)
-    //     }
-    // }
+        }
+        catch(error){
+            console.error("Error updating document: ", error)
+        }
+    }
+
+    const openEditModal = (item: ItemPrototype) =>{
+        setEditingItem(item);
+        setItemName(item.name);
+        setItemNote(item.note)
+        setItemStatus(item.status)
+        setItemBudget(item.budget)
+        setModalVisible(true);
+    }
+    const closeModal = () =>{
+        setEditingItem(null);
+        setItemName('');
+        setItemNote('')
+        setItemStatus(false)
+        setItemBudget(0)
+        setModalVisible(false);
+    }
+
+    const saveItem = async() =>{
+        if(editingItem){
+            const updatedData ={
+                name: itemName,
+                note:itemNote,
+                status:itemStatus,
+                budget:itemBudget,
+            }
+                await updateListItem(editingItem.id, updatedData)
+        }
+        else{
+            await addListItem();
+        }
+        closeModal()
+    }
     
 
     useEffect(() => {
@@ -138,6 +171,14 @@ export default function DetailScreen(props: any) {
 
     const renderHiddenItem = ( data: {item: ItemPrototype}, rowMap: any) =>(
         <View style={styles.rowBack}>
+            <Pressable
+         style={[styles.backLeftBtn, styles.backLeftBtnLeft ]}
+        onPress={() => openEditModal(data.item)}
+        >
+            <Text style = {styles.backTextWhite}></Text>
+            <Ionicons name="pencil" size={30} color="black"/>
+
+        </Pressable>
         <Pressable
          style={[styles.backRightBtn, styles.backRightBtnRight ]}
         onPress={() => deleteListItem(data.item.id)}
@@ -185,27 +226,6 @@ export default function DetailScreen(props: any) {
 
     // list renderer
     const renderItems = ({ item }: any) => (
-        // <Link href={{ 
-        //     pathname: "/(details)/itemdetail",
-        //     params: { id: item.id, name: item.name }
-        // }}
-        // >
-            // <View style={ styles.item }>
-            //     <View style={ styles.itemLeft }> 
-            //     <Text style ={styles.title}>{item.name}</Text>
-            //     <Text>Status: {item.status? 'Completed' : 'Pending'} </Text>
-
-            //     </View>
-            //     <View style={ styles.itemRight }>
-            //     <Text style={styles.date }>
-            //     <DisplayDate date={item.date} mode="date" />
-            //   </Text>
-            //     <Text style={styles.date }>Budget: ${item.budget}</Text>
-                
-            //     </View>
-            
-            // </View>
-        // </Link>
         <View style={ styles.item }>
                 <View style={ styles.itemLeft }> 
                 <Text style ={styles.title}>{item.name}</Text>
@@ -226,22 +246,15 @@ export default function DetailScreen(props: any) {
     if (list) {
         return (
             <View style={styles.page}>
-                {/* <FlatList
-                    data={listItems}
-                    renderItem={renderItems}
-                    ListEmptyComponent={<ListEmpty text="You have no items! Add some to this list" />}
-                    ListHeaderComponent={<ListHeader text={list.name} />}
-                    ItemSeparatorComponent={ListItemSeparator}
-                /> */}
-
                 <SwipeListView
                      data={listItems}
                      renderItem={renderItems}
                      renderHiddenItem={renderHiddenItem}
                      rightOpenValue={-75}
+                     leftOpenValue={75}
                      ListEmptyComponent={<ListEmpty text="You have no items! Add some to this list" />}
                     ListHeaderComponent={<ListHeader text={list.name} />}
-                    ItemSeparatorComponent={ListItemSeparator}
+                    ItemSeparatorComponent={ListItemSeperator}
                 
                 />
                 {renderConfirmModal()}
@@ -420,6 +433,20 @@ const styles = StyleSheet.create({
         backTextWhite: 
         { color: "black",
         },
+        backLeftBtn: { 
+            alignItems: 'center', 
+            bottom: 0, 
+            justifyContent: 'center', 
+            position: 'absolute', 
+            top: 0, 
+            width: 75, 
+            // backgroundColor: 'blue', 
+            left: 0, 
+        }, 
+        backLeftBtnLeft: { 
+            // backgroundColor: 'blue',
+        },
+
 
 
 })

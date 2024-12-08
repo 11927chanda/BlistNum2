@@ -10,8 +10,8 @@ export function ListItemSeperator(props:any){
 
 const styles = StyleSheet.create({
     seperator: {
-        height: 20,
-        backgroundColor: "#32173b",
+        height: 10,
+        // backgroundColor: "#32173b",
         minWidth: '99%',
         marginLeft: 2,
         borderRadius: 10,
