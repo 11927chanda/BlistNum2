@@ -10,7 +10,7 @@ import { DisplayDate } from '@/components/DisplayDate'
 import { ListPrototype } from '@/interfaces/ListInterface'
 import { ListEmpty } from '@/components/ListEmpty'
 import { ListHeader } from '@/components/ListHeader'
-import { ListItemSeperator } from '@/components/ListItemSeparator'
+import { ListItemSeperator } from '@/components/ListItemSeperator'
 
 import { ItemPrototype } from '@/interfaces/ItemInterface'
 import { SwipeListView } from 'react-native-swipe-list-view'

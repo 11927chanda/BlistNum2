@@ -1,7 +1,7 @@
-import { Text, View, StyleSheet, FlatList, Modal, Pressable, TextInput, ImageBackground } from 'react-native'
+import { Text, View, StyleSheet, FlatList, Modal, Pressable, TextInput, ImageBackground, Dimensions } from 'react-native'
 import { useState, useEffect, useContext } from 'react'
 import { ListHeader } from '@/components/ListHeader'
-import { ListItemSeparator } from '@/components/ListItemSeparator'
+import { ListItemSeparator } from '@/components/ListItemSeperator'
 import { ListEmpty } from '@/components/ListEmpty'
 import { ListPrototype } from '@/interfaces/ListInterface'
 import { DisplayDate } from '@/components/DisplayDate'
@@ -68,13 +68,14 @@ export default function List(props: any) {
                 params: { id: item.id, name: item.name }
             }}>
                 <View style={styles.item}>
-                    <View>
-                        <Text style={styles.itemName} >{item.name}</Text>
-                        <Text>
-                            Last Updated: <DisplayDate date={item.date} mode="date" />
+                    <View style ={styles.containerCategory}>
+                    <Text>
+                      <DisplayDate date={item.date} mode="date" />
                         </Text>
+                        <Text style={styles.itemName} >{item.name}</Text>
+                        
                     </View>
-                    <Ionicons name="chevron-forward-outline" size={16} />
+                    
                 </View >
             </Link>
         )
@@ -96,6 +97,9 @@ export default function List(props: any) {
                 ListEmptyComponent={<ListEmpty text="You have no lists, add one" />}
                 ItemSeparatorComponent={ListItemSeparator}
                 style={styles.list}
+                numColumns={2}
+                columnWrapperStyle ={{gap:3, justifyContent: "flex-start"}}
+                horizontal = {false}
             />
             {/* Modal to add lists */}
             <Modal visible={modalVisible} >
@@ -140,26 +144,44 @@ export default function List(props: any) {
         </View>
     )
 }
+const screenWidth = Dimensions.get('window').width
+const itemSize = screenWidth / 2-10
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        width: "100%",
     },
     list: {
         width: "100%",
+        height: 800,
     },
     item: {
         padding: 12,
         backgroundColor: "#d9d9d9",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        width: "100%",
-        margin:2,
+        flexDirection: "column",
+        //justifyContent: "space-between",
+        //alignItems: "center",
+       // width: "100%",
+        margin:4,
+        
         borderRadius: 10,
+        flex: 1,
+        width: itemSize,
+        maxWidth:itemSize,
+        //maxHeight: 800
+
+
+    },
+    containerCategory:{
+        // width: "100%",
+        // height: 80,
     },
     itemName: {
-        fontSize: 18
+        fontSize: 25,
+        alignSelf:"center",
+        //width: 100,
+    maxHeight:50,
     },
     button: {
         padding: 10,
